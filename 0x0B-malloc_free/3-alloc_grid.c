@@ -1,43 +1,45 @@
 #include "main.h"
-#include <stdlib.h>
 /**
- * alloc_grid - nested loop to make grid
- * @width: width input
- * @height: height input
- * Return: pointer to 2 dim. array
+ * alloc_grid - creates a 2 dimensional array of integers
+ * @width: width of the grid
+ * @height: height of the grid
+ * Return: pointer to 2d array of integers, otherwise NULL
  */
+
 int **alloc_grid(int width, int height)
 {
-	int **mee;
-	int x, y;
+	int **grid;
+	int row;
+	int column;
 
 	if (width <= 0 || height <= 0)
-		return (NULL);
-
-	mee = malloc(sizeof(int *) * height);
-
-	if (mee == NULL)
-		return (NULL);
-
-	for (x = 0; x < height; x++)
 	{
-		mee[x] = malloc(sizeof(int) * width);
+		return (NULL);
+	}
 
-		if (mee[x] == NULL)
+	grid = malloc(sizeof(int *) * height);
+	if (grid == NULL)
+	{
+		return (NULL);
+	}
+
+	for (row = 0; row < height; row++)
+	{
+		grid[row] = malloc(sizeof(int) * width);
+		if (grid[row] == NULL)
 		{
-			for (; x >= 0; x--)
-				free(mee[x]);
-
-			free(mee);
+			for (column = 0; column < row; column++)
+			{
+				free(grid[column]);
+			}
+			free(grid);
 			return (NULL);
 		}
+		for (column = 0; column < width; column++)
+		{
+			grid[row][column] = 0;
+		}
 	}
-
-	for (x = 0; x < height; x++)
-	{
-		for (y = 0; y < width; y++)
-			mee[x][y] = 0;
-	}
-
-	return (mee);
+	return (grid);
 }
+

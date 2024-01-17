@@ -1,1 +1,1 @@
-0x04. C - More functions, more nested loops
+ this directory contains tasks for alx "more functions and more nested loops" project

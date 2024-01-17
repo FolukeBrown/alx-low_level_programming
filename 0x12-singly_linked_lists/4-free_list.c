@@ -1,19 +1,18 @@
-#include <stdlib.h>
 #include "lists.h"
 
 /**
- * free_list - Function to free a linked list
- * @head: List_t list to be freed
+ * free_list - Frees a list_t list
+ * @head: contains base address of the list
  */
 void free_list(list_t *head)
 {
-	list_t *temp;
+	list_t *current_node;
 
-	while (head)
+	while (head != NULL)
 	{
-		temp = head->next;
-		free(head->str);
-		free(head);
-		head = temp;
+		current_node = head;
+		head = head->next;
+		free(current_node->str);
+		free(current_node);
 	}
 }

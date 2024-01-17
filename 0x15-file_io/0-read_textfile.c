@@ -1,43 +1,51 @@
-/*
- * File: 0-read_textfile.c
- * Auth: Dr Marcus.
- */
 #include "main.h"
-#include <stdlib.h>
 
 /**
- * read_textfile - Reads a text file and prints it to POSIX stdout.
- * @filename: A pointer to the name of the file.
- * @letters: The number of letters the
- *           function should read and print.
+ * read_textfile - reads a text file and prints to the STDOUT
+ * @filename: name of the file to be read
+ * @letters: maximum number of letters to be read and printed
  *
- * Return: If the function fails or filename is NULL - 0.
- *         O/w - the actual number of bytes the function can read and print.
+ * Return: actual number of letters it could read and print
+ * if filename is NULL return 0
+ * if write fails return 0
  */
+
 ssize_t read_textfile(const char *filename, size_t letters)
 {
-	ssize_t o, r, w;
+	int fd, length, i, result;
 	char *buffer;
 
+	/*check if the parameter is NULL*/
 	if (filename == NULL)
 		return (0);
 
+	/*open the file in read only mode*/
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (0);
+
+	/*allocate a buffer of size letters*/
 	buffer = malloc(sizeof(char) * letters);
 	if (buffer == NULL)
 		return (0);
 
-	o = open(filename, O_RDONLY);
-	r = read(o, buffer, letters);
-	w = write(STDOUT_FILENO, buffer, r);
+	/*read and add a null terminator*/
+	read(fd, buffer, letters);
+	buffer[letters] = '\0';
 
-	if (o == -1 || r == -1 || w == -1 || w != r)
-	{
-		free(buffer);
+	for (i = 0; buffer[i] != '\0'; i++)
+		length += 1;
+
+	result = close(fd);
+	if (result != 0)
+		exit(-1);
+
+	/*write contents of buffer to STDOUT*/
+	result = write(STDOUT_FILENO, buffer, length);
+	if (result != length)
 		return (0);
-	}
 
 	free(buffer);
-	close(o);
 
-	return (w);
+	return (length);
 }
